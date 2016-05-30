@@ -22,13 +22,9 @@
         // This widget has a clear button
         $(this).find('option[value=""]').remove();
 
-        $(this).select2({
-            tokenSeparators: element.attr('data-tags') ? [','] : null,
-            debug: true,
-            placeholder: '',
-            minimumInputLength: 0,
-            allowClear: ! $(this).is('required'),
-            ajax: {
+        var ajax = null;
+        if ($(this).attr('data-autocomplete-light-url')) {
+            ajax = {
                 url: $(this).attr('data-autocomplete-light-url'),
                 dataType: 'json',
                 delay: 250,
@@ -53,7 +49,16 @@
                     return data;
                 },
                 cache: true
-            },
+            };
+        }
+
+        $(this).select2({
+            tokenSeparators: element.attr('data-tags') ? [','] : null,
+            debug: true,
+            placeholder: '',
+            minimumInputLength: 0,
+            allowClear: ! $(this).is('required'),
+            ajax: ajax,
         });
 
         $(this).on('select2:selecting', function (e) {
